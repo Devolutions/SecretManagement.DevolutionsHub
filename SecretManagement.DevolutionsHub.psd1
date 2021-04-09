@@ -9,7 +9,7 @@
 @{
 
 # Script module or binary module file associated with this manifest.
-# RootModule = ''
+RootModule = '.\publish\Devolutions.Hub.PowerShell.dll'
 
 # Version number of this module.
 ModuleVersion = '0.0.1'
@@ -66,7 +66,7 @@ Description = 'SecretManagemnet extension for Devolutions Hub vaults'
 # FormatsToProcess = @()
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-# NestedModules = @()
+NestedModules = @('.\SecretManagement.DevolutionsHub.Extension')
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
 FunctionsToExport = @()
@@ -95,7 +95,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        # Tags = @()
+        Tags = @('SecretManagement')
 
         # A URL to the license for this module.
         # LicenseUri = ''

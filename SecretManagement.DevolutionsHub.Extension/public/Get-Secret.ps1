@@ -42,7 +42,9 @@ function Get-SecretInfo {
 
     if (-not $foundEntry) {
         Write-Output "no entry found";
+        # throw error
     } else {
         Write-Output $foundEntry.Id;
+        # return credentials
     }
 }
