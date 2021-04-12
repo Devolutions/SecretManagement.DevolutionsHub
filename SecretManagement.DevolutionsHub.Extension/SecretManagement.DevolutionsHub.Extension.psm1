@@ -1,6 +1,13 @@
 using namespace Microsoft.PowerShell.SecretManagement
+using namespace Devolutions.Powershell.Hub
 
-Get-ChildItem "$PSScriptRoot/public" | ForEach-Object {
-    Export-ModuleMember $_.BaseName;
-    # https://powershellexplained.com/2017-05-27-Powershell-module-building-basics/
+Get-ChildItem "$PSScriptRoot/Private" | Foreach-Object {
+    . $PSItem.FullName
 }
+
+$publicFunctions = Get-ChildItem "$PSScriptRoot/Public" | Foreach-Object {
+    . $PSItem.FullName
+    $PSItem.BaseName
+}
+
+Export-ModuleMember $publicFunctions

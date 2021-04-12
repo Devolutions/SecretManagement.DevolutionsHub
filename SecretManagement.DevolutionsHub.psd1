@@ -30,10 +30,10 @@ CompanyName = 'Devolutions inc.'
 Copyright = '(c) sbaker. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'SecretManagemnet extension for Devolutions Hub vaults'
+Description = 'SecretManagement extension for Devolutions Hub vaults'
 
 # Minimum version of the PowerShell engine required by this module
-# PowerShellVersion = ''
+PowerShellVersion = '7.0'
 
 # Name of the PowerShell host required by this module
 # PowerShellHostName = ''
@@ -51,7 +51,7 @@ Description = 'SecretManagemnet extension for Devolutions Hub vaults'
 # ProcessorArchitecture = ''
 
 # Modules that must be imported into the global environment prior to importing this module
-# RequiredModules = @('Microsoft.PowerShell.SecretManagement', 'Devolutions.Hub.Powershell')
+RequiredModules = @('Microsoft.PowerShell.SecretManagement', 'Devolutions.Hub.Powershell')
 
 # Assemblies that must be loaded prior to importing this module
 # RequiredAssemblies = @()

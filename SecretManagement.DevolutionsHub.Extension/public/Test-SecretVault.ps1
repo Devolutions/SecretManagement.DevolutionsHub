@@ -8,7 +8,8 @@ function Test-SecretVault
     $verboseEnabled = $AdditionalParameters.ContainsKey('Verbose') -and ($AdditionalParameters['Verbose'] -eq $true)
     Write-Verbose "[TestLocalScript.Extension]:Test-SecretVault successfully called for vault: $VaultName" -Verbose:$verboseEnabled
 
-    # not how this works
+    # should be changed to use private function
+
     $url = $AdditionalParameters.Url;
     $applicationSecret = $AdditionalParameters.ApplicationSecret;
     $applicationKey = $AdditionalParameters.ApplicationKey;

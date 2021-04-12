@@ -9,42 +9,50 @@ function Get-SecretInfo {
         [hashtable]$AdditionalParameters = (Get-SecretVault -Name $VaultName).VaultParameters
     )
 
-    # get hub context
+    try {
+        Connect-DevolutionsHub('');  # review parameters
 
-    $vaultId = $AdditionalParameters.VaultId;
-    $secretName = $AdditionalParameters.Name;
+        $vaultId = $AdditionalParameters.VaultId;
+        $secretName = $AdditionalParameters.Name;
 
-    if (-not $secretName) {
-        # prompt for entry name
-    }
+        if (-not $secretName) {
+            # prompt for entry name
+        }
 
-    $foundEntry;
-    if (-not $vaultId) {
-        foreach ($vault in Get-HubVault) {
-            foreach ($entry in (Get-HubEntry -VaultId $vault.Id)) {
+        $foundEntry;
+        if (-not $vaultId) {
+            foreach ($vault in Get-HubVault) {
+                foreach ($entry in (Get-HubEntry -VaultId $vault.Id)) {
+                    if ($vault.Name -eq $secretName) {
+                        $foundEntry = $vault;
+                        break;
+                    }
+                }
+                if (! (-not $foundEntry)) {
+                    # is empty
+                    break;
+                }
+            }
+        }
+        else {
+            foreach ($entry in (Get-HubEntry -VaultId $vaultId)) {
                 if ($vault.Name -eq $secretName) {
                     $foundEntry = $vault;
                     break;
                 }
             }
-            if (! (-not $foundEntry)) { # is empty
-                break;
-            }
         }
-    } else {
-        foreach ($entry in (Get-HubEntry -VaultId $vaultId)) {
-            if ($vault.Name -eq $secretName) {
-                $foundEntry = $vault;
-                break;
-            }
+
+        if (-not $foundEntry) {
+            Write-Output "no entry found";
+            # throw error
+        }
+        else {
+            Write-Output $foundEntry.Id;
+            # return credentials
         }
     }
-
-    if (-not $foundEntry) {
-        Write-Output "no entry found";
-        # throw error
-    } else {
-        Write-Output $foundEntry.Id;
-        # return credentials
+    catch {
+        Disconnect-DevolutionsHub('');  # review parameters
     }
 }
