@@ -9,7 +9,7 @@
 @{
 
 # Script module or binary module file associated with this manifest.
-RootModule = '.\publish\Devolutions.Hub.PowerShell.dll'
+# RootModule = '.\publish\Devolutions.Hub.PowerShell.dll'
 
 # Version number of this module.
 ModuleVersion = '0.0.1'
@@ -51,7 +51,16 @@ PowerShellVersion = '7.0'
 # ProcessorArchitecture = ''
 
 # Modules that must be imported into the global environment prior to importing this module
-RequiredModules = @('Microsoft.PowerShell.SecretManagement', 'Devolutions.Hub')
+RequiredModules = @(
+    @{
+        ModuleName = 'Microsoft.Powershell.SecretManagement'
+        ModuleVersion = '1.0.0'
+    }, 
+    @{
+        ModuleName = 'Devolutions.Hub'
+        ModuleVersion = '2021.1.2'
+    }
+)
 
 # Assemblies that must be loaded prior to importing this module
 # RequiredAssemblies = @()
@@ -69,7 +78,7 @@ RequiredModules = @('Microsoft.PowerShell.SecretManagement', 'Devolutions.Hub')
 NestedModules = @('.\SecretManagement.DevolutionsHub.Extension')
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = @()
+FunctionsToExport = @('Register-DevolutionsHubSecretVault', 'Test-DevolutionsHubR')
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = @()
@@ -107,10 +116,10 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        # ReleaseNotes = ''
+        ReleaseNotes = ''
 
         # Prerelease string of this module
-        # Prerelease = ''
+        Prerelease = ''
 
         # Flag to indicate whether the module requires explicit user acceptance for install/update/save
         # RequireLicenseAcceptance = $false
