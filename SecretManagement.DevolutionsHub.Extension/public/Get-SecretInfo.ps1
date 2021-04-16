@@ -1,10 +1,12 @@
 using namespace Microsoft.PowerShell.SecretManagement
-function Get-SecretInfo {
+
+function Get-SecretInfo
+{
     [CmdletBinding()]
     param(
-        [Alias('Name')][string]$Filter,
-        [string]$VaultName = (Get-SecretVault).VaultName,
-        [hashtable]$AdditionalParameters = (Get-SecretVault -Name $VaultName).VaultParameters
+        [string] $Filter,
+        [string] $VaultName = (Get-SecretVault).VaultName,
+        [hashtable] $AdditionalParameters = (Get-SecretVault -Name $VaultName).VaultParameters
     )
     
     # get hub context

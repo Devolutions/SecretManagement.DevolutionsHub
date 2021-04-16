@@ -1,5 +1,7 @@
+
 function Set-Secret
 {
+    [CmdletBinding()]
     param (
         [string] $Name,
         [object] $Secret,
@@ -47,5 +49,6 @@ function Set-Secret
             }
         }
     }
+    
     New-HubEntry -VaultId $vaultId -Connection $newHubEntry
 }

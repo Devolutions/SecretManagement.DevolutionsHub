@@ -1,5 +1,4 @@
 using namespace Microsoft.PowerShell.SecretManagement
-using namespace Devolutions.Hub.Powershell
 
 Get-ChildItem "$PSScriptRoot/Private" | Foreach-Object {
     . $PSItem.FullName

@@ -1,5 +1,7 @@
+
 function Test-SecretVault
 {
+    [CmdletBinding()]
     param (
         [string] $VaultName,
         [hashtable] $AdditionalParameters
