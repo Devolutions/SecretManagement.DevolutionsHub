@@ -1,12 +1,13 @@
 using namespace Microsoft.PowerShell.SecretManagement
 using namespace Devolutions.Hub.PowerShell
 
-function Get-SecretInfo {
+function Get-Secret
+{
     [CmdletBinding()]
     param(
-        [Alias('Name')][string]$Filter,
-        [string]$VaultName = (Get-SecretVault).VaultName,
-        [hashtable]$AdditionalParameters = (Get-SecretVault -Name $VaultName).VaultParameters
+        [string] $Name,
+        [string] $VaultName = (Get-SecretVault).VaultName,
+        [hashtable] $AdditionalParameters = (Get-SecretVault -Name $VaultName).VaultParameters
     )
 
     try {
