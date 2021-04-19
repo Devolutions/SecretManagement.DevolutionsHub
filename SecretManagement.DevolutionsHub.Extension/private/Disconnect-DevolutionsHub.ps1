@@ -8,4 +8,5 @@ function Disconnect-DevolutionsHub {
     )
     
     Disconnect-HubAccount -ApplicationKey $hubParameters.ApplicationKey;
+    Write-Verbose 'Disconnected' -Verbose:$verboseEnabled #
 }

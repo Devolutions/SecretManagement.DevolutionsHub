@@ -13,5 +13,7 @@ function Connect-DevolutionsHub {
         Url=$hubParameters.Url
     }
 
+    Write-Verbose 'Connecting to Hub' -Verbose:$verboseEnabled #
     Connect-HubAccount -PSHubContext $PSHubContext;
+    Write-Verbose 'Connected to Hub' -Verbose:$verboseEnabled #
 }

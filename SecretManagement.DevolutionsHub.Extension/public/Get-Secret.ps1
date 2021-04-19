@@ -13,30 +13,22 @@ function Get-Secret
     $verboseEnabled = $AdditionalParameters.ContainsKey('Verbose') -and ($AdditionalParameters['Verbose'] -eq $true)
     Write-Verbose "Get-Secret Vault: $VaultName" -Verbose:$verboseEnabled
 
+    $hubParameters = (Get-SecretVault -Name $VaultName).VaultParameters
     try {
-        Write-Verbose 'Connecting to Hub' -Verbose:$verboseEnabled #
-        $hubParameters = (Get-SecretVault -Name $VaultName).VaultParameters
-        #Connect-DevolutionsHub($VaultName, $hubParameters);  # review parameters    
-        $PSHubContext = [Devolutions.Hub.PowerShell.Entities.PowerShell.PSHubContext] @{
-            ApplicationKey=$hubParameters.ApplicationKey; 
-            ApplicationSecret=$hubParameters.ApplicationSecret; 
-            Url=$hubParameters.Url
-        }    
-        Connect-HubAccount -PSHubContext $PSHubContext;
-        Write-Verbose 'Connected to Hub' -Verbose:$verboseEnabled #
+        Connect-DevolutionsHub($VaultName, $hubParameters);
 
         $vaultId = $hubParameters.VaultId;
 
-        Write-Verbose $Name -Verbose:$verboseEnabled #
+        Write-Verbose $Name -Verbose:$verboseEnabled
 
         $foundEntry = $null;
         if (-not $vaultId) {
             foreach ($vault in Get-HubVault) {                
-                Write-Verbose $vault.Id -Verbose:$verboseEnabled #
+                Write-Verbose $vault.Id -Verbose:$verboseEnabled
                 foreach ($entry in (Get-HubEntry -VaultId $vault.Id)) {
                     if ($entry.Connection.Name -eq $Name) {
                         $foundEntry = $entry;
-                        Write-Verbose "Entry $Name was found" -Verbose:$verboseEnabled #
+                        Write-Verbose "Entry $Name was found" -Verbose:$verboseEnabled
                         break;
                     }
                 }
@@ -51,14 +43,14 @@ function Get-Secret
             foreach ($entry in (Get-HubEntry -VaultId $vaultId)) {
                 if ($entry.Connection.Name -eq $Name) {
                     $foundEntry = $entry;
-                    Write-Verbose "Entry $Name was found" -Verbose:$verboseEnabled #
+                    Write-Verbose "Entry $Name was found" -Verbose:$verboseEnabled
                     break;
                 }
             }
         }
 
         if (-not $foundEntry) {
-            Write-Verbose "no entry found" -Verbose:$verboseEnabled #
+            Write-Verbose "no entry found" -Verbose:$verboseEnabled
             throw "Entry Not found";
         }
         else {
@@ -67,11 +59,9 @@ function Get-Secret
         }
     }
     catch {
-        $errorMessage = $_.Exception.Message;
-        Write-Verbose $errorMessage -Verbose:$verboseEnabled
+        Write-Verbose $_.Exception.Message -Verbose:$verboseEnabled
     }
     finally {
-        #Disconnect-DevolutionsHub($hubParameters);  # review parameters
-        Disconnect-HubAccount -ApplicationKey $hubParameters.ApplicationKey;
+        Disconnect-DevolutionsHub($hubParameters);
     }
 }
