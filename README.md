@@ -19,7 +19,27 @@ Register-SecretVault -Name 'hubVaultName' -ModuleName 'SecretManagement.Devoluti
 }
 ```
 
-* Get entries using the stored vault
+* Test the vault
+```PowerShell
+Test-SecretVault -Vault 'hubVaultName'
 ```
-Get-Secret -Name 'entry1' -VaultName 'hubVaultName'
+
+* Add an entry to the stored vault
+```PowerShell
+Set-Secret -VaultName 'hubVaultName' -Name 'entryName' -Secret $credentials
+```
+
+* Get a list of available entries from the stored vault
+```PowerShell
+Get-SecretInfo -VaultName 'hubVaultName'
+```
+
+* Get an entry using the stored vault
+```PowerShell
+Get-Secret -VaultName 'hubVaultName' -Name 'entryName'
+```
+
+* Remove an entry from the stored vault
+```PowerShell
+Remove-Secret -VaultName 'hubVaultName'
 ```
