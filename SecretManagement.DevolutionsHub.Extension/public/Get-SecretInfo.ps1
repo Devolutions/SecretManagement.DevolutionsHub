@@ -1,21 +1,33 @@
 using namespace Microsoft.PowerShell.SecretManagement
+using namespace Devolutions.Hub.PowerShell
 
 function Get-SecretInfo
 {
     [CmdletBinding()]
     param(
         [string] $Filter,
-        [string] $VaultName = (Get-SecretVault).VaultName,
-        [hashtable] $AdditionalParameters = (Get-SecretVault -Name $VaultName).VaultParameters
+        [string] $VaultName,
+        [hashtable] $AdditionalParameters
     )
     
+    $verboseEnabled = $AdditionalParameters.ContainsKey('Verbose') -and ($AdditionalParameters['Verbose'] -eq $true)
+    Write-Verbose "[TestLocalScript.Extension]:Get-SecretInfo successfully called for vault: $VaultName" -Verbose:$verboseEnabled
+
+    Write-Verbose $AdditionalParameters.ApplicationKey.Substring(0,8) -Verbose:$verboseEnabled
+
+    Write-Verbose "(Get-SecretVault -Name $VaultName)" -Verbose:$verboseEnabled
+    $hubParameters = (Get-SecretVault -Name $VaultName).VaultParameters
+    
     # get hub context
+    Connect-DevolutionsHub($VaultName, $hubParameters);
 
     $vaultId = $AdditionalParameters.VaultId;
+    Write-Verbose "selected vault Id: $vaultId" -Verbose:$verboseEnabled #
 
     $hubEntries = [System.Collections.ArrayList]::new();
     if (-not $vaultId) {
         foreach ($vault in Get-HubVault) {
+            Write-Verbose $vault.Id -Verbose:$verboseEnabled #
             foreach ($entry in (Get-HubEntry -VaultId $vault.Id)) {
                 $hubEntries.Add($entry);
             }
@@ -25,6 +37,8 @@ function Get-SecretInfo
             $hubEntries.Add($entry);
         }
     }
+
+    Write-Verbose $hubEntries.Count -Verbose:$verboseEnabled #
 
     return $hubEntries | ForEach-Object {
         [Microsoft.PowerShell.SecretManagement.SecretInformation]::new(

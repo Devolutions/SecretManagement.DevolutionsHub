@@ -1,6 +1,5 @@
 
-function Test-SecretVault
-{
+function Test-SecretVault {
     [CmdletBinding()]
     param (
         [string] $VaultName,
@@ -8,27 +7,37 @@ function Test-SecretVault
     )
 
     $verboseEnabled = $AdditionalParameters.ContainsKey('Verbose') -and ($AdditionalParameters['Verbose'] -eq $true)
-    Write-Verbose "[TestLocalScript.Extension]:Test-SecretVault successfully called for vault: $VaultName" -Verbose:$verboseEnabled
+    Write-Verbose "Test-SecretVault: $VaultName" -Verbose:$verboseEnabled
 
-    # should be changed to use private function
+    try {
+        # should be changed to use private function
+        $hubParameters = (Get-SecretVault -Name $VaultName).VaultParameters
 
-    $url = $AdditionalParameters.Url;
-    $applicationSecret = $AdditionalParameters.ApplicationSecret;
-    $applicationKey = $AdditionalParameters.ApplicationKey;
+        $url = $hubParameters.Url;
+        $applicationSecret = $hubParameters.ApplicationSecret;
+        $applicationKey = $hubParameters.ApplicationKey;
 
-    if (-not $url) {
-        $url = Read-Host 'Url: ';
+        #this should not be necessary
+        if (-not $url) {
+            $url = Read-Host 'Url: ';
+        }
+
+        if (-not $applicationKey) {
+            $applicationKey = Read-Host 'Application Key: ';
+        }
+
+        if (-not $applicationSecret) {
+            $applicationSecret = Read-Host 'Application Secret: ';
+        }
+
+        Connect-HubAccount -Url $url -ApplicationSecret $applicationSecret -ApplicationKey $applicationKey
+        # Connect-HubAccount returning the context would be useful
+        $hubContext = Get-HubContext;
+
+        return -not ($null -eq $hubContext) # cant know if this is the right one
     }
-
-    if (-not $applicationKey) {
-        $applicationKey = Read-Host 'Application Key: ';
+    catch {
+        
     }
-
-    if (-not $applicationSecret) {
-        $applicationSecret = Read-Host 'Application Secret: ';
-    }
-
-    $context = Connect-HubAccount -Url $url -ApplicationSecret $applicationSecret -ApplicationKey $applicationKey
-
-    return -not ($null -eq $context) # cant know if this is the right one
+    
 }

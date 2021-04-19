@@ -15,6 +15,7 @@ Register-SecretVault -Name 'hubVaultName' -ModuleName 'SecretManagement.Devoluti
     Url = ""
     ApplicationKey = ""
     ApplicationSecret = ""
+    VaultId = "" # optional
 }
 ```
 

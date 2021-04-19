@@ -6,54 +6,72 @@ function Get-Secret
     [CmdletBinding()]
     param(
         [string] $Name,
-        [string] $VaultName = (Get-SecretVault).VaultName,
-        [hashtable] $AdditionalParameters = (Get-SecretVault -Name $VaultName).VaultParameters
+        [string] $VaultName,
+        [hashtable] $AdditionalParameters
     )
 
+    $verboseEnabled = $AdditionalParameters.ContainsKey('Verbose') -and ($AdditionalParameters['Verbose'] -eq $true)
+    Write-Verbose "Get-Secret Vault: $VaultName" -Verbose:$verboseEnabled
+
     try {
-        Connect-DevolutionsHub('');  # review parameters
+        Write-Verbose 'Connecting to Hub' -Verbose:$verboseEnabled #
+        $hubParameters = (Get-SecretVault -Name $VaultName).VaultParameters
+        #Connect-DevolutionsHub($VaultName, $hubParameters);  # review parameters    
+        $PSHubContext = [Devolutions.Hub.PowerShell.Entities.PowerShell.PSHubContext] @{
+            ApplicationKey=$hubParameters.ApplicationKey; 
+            ApplicationSecret=$hubParameters.ApplicationSecret; 
+            Url=$hubParameters.Url
+        }    
+        Connect-HubAccount -PSHubContext $PSHubContext;
+        Write-Verbose 'Connected to Hub' -Verbose:$verboseEnabled #
 
-        $vaultId = $AdditionalParameters.VaultId;
-        $secretName = $AdditionalParameters.Name;
+        $vaultId = $hubParameters.VaultId;
 
-        if (-not $secretName) {
-            # prompt for entry name
-        }
+        Write-Verbose $Name -Verbose:$verboseEnabled #
 
-        $foundEntry;
+        $foundEntry = $null;
         if (-not $vaultId) {
-            foreach ($vault in Get-HubVault) {
+            foreach ($vault in Get-HubVault) {                
+                Write-Verbose $vault.Id -Verbose:$verboseEnabled #
                 foreach ($entry in (Get-HubEntry -VaultId $vault.Id)) {
-                    if ($vault.Name -eq $secretName) {
-                        $foundEntry = $vault;
+                    if ($entry.Connection.Name -eq $Name) {
+                        $foundEntry = $entry;
+                        Write-Verbose "Entry $Name was found" -Verbose:$verboseEnabled #
                         break;
                     }
                 }
-                if (! (-not $foundEntry)) {
-                    # is empty
+                
+                if ($foundEntry){
+                    # found
                     break;
                 }
             }
         }
         else {
             foreach ($entry in (Get-HubEntry -VaultId $vaultId)) {
-                if ($vault.Name -eq $secretName) {
-                    $foundEntry = $vault;
+                if ($entry.Connection.Name -eq $Name) {
+                    $foundEntry = $entry;
+                    Write-Verbose "Entry $Name was found" -Verbose:$verboseEnabled #
                     break;
                 }
             }
         }
 
         if (-not $foundEntry) {
-            Write-Output "no entry found";
-            # throw error
+            Write-Verbose "no entry found" -Verbose:$verboseEnabled #
+            throw "Entry Not found";
         }
         else {
-            Write-Output $foundEntry.Id;
-            # return credentials
+            $securePassword = ConvertTo-SecureString -String $foundEntry.Connection.Credentials.Password -AsPlainText;
+            return [PSCredential]::new($foundEntry.Connection.Credentials.UserName, $securePassword);
         }
     }
     catch {
-        Disconnect-DevolutionsHub('');  # review parameters
+        $errorMessage = $_.Exception.Message;
+        Write-Verbose $errorMessage -Verbose:$verboseEnabled
+    }
+    finally {
+        #Disconnect-DevolutionsHub($hubParameters);  # review parameters
+        Disconnect-HubAccount -ApplicationKey $hubParameters.ApplicationKey;
     }
 }

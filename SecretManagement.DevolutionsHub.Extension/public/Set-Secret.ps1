@@ -1,3 +1,4 @@
+using namespace Devolutions.Hub.PowerShell
 
 function Set-Secret
 {
@@ -8,6 +9,9 @@ function Set-Secret
         [string] $VaultName,
         [hashtable] $AdditionalParameters
     )
+
+    $verboseEnabled = $AdditionalParameters.ContainsKey('Verbose') -and ($AdditionalParameters['Verbose'] -eq $true)
+    Write-Verbose "Set-Secret Vault: $VaultName" -Verbose:$verboseEnabled
 
     # get hub context
 

@@ -1,3 +1,4 @@
+using namespace Devolutions.Hub.PowerShell
 
 function Remove-Secret
 {
@@ -7,6 +8,9 @@ function Remove-Secret
         [string] $VaultName,
         [hashtable] $AdditionalParameters
     )
+
+    $verboseEnabled = $AdditionalParameters.ContainsKey('Verbose') -and ($AdditionalParameters['Verbose'] -eq $true)
+    Write-Verbose "Remove-Secret Vault: $VaultName" -Verbose:$verboseEnabled
 
     # get hub context
 }
