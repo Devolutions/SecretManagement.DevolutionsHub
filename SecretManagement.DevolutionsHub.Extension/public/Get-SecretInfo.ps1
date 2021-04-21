@@ -21,16 +21,8 @@ function Get-SecretInfo
         Write-Verbose "selected vault Id: $vaultId" -Verbose:$verboseEnabled
     
         $hubEntries = [System.Collections.ArrayList]::new();
-        if (-not $vaultId) {
-            foreach ($vault in Get-HubVault) {
-                Write-Verbose $vault.Id -Verbose:$verboseEnabled
-                foreach ($entry in (Get-HubEntry -VaultId $vault.Id)) {
-                    $hubEntries.Add($entry);
-                    Write-Verbose "Added: $($entry.Connection.Name)" -Verbose:$verboseEnabled
-                }
-            }
-        } else {
-            foreach ($entry in (Get-HubEntry -VaultId $vaultId)) {
+        foreach ($entry in (Get-HubEntry -VaultId $vaultId)) {
+            if ($Filter -eq "*" -or $entry.Connection.Name -match $Filter) {
                 $hubEntries.Add($entry);
                 Write-Verbose "Added: $($entry.Connection.Name)" -Verbose:$verboseEnabled
             }
@@ -41,14 +33,14 @@ function Get-SecretInfo
         return $hubEntries | ForEach-Object {
             [Microsoft.PowerShell.SecretManagement.SecretInformation]::new(
                 $_.Connection.Name, 
-                [Microsoft.PowerShell.SecretManagement.SecretType]::PSCredential,
+                [Microsoft.PowerShell.SecretManagement.SecretType]::PSCredential, # Get-Secret always returns PSCredential
                 $VaultName,
                 @{
                     Name = "ID"
                     Value = $_.Connection.ID
                 }
             )
-        } | Sort-Object -Property Name #-Unique (same name entries will cause issues)
+        } | Sort-Object -Property Name
     }
     catch {
         Write-Verbose $_.Exception.Message -Verbose:$verboseEnabled

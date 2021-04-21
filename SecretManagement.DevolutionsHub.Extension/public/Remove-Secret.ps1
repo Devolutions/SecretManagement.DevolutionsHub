@@ -21,7 +21,14 @@ function Remove-Secret
             $vaultId = Read-Host 'Hub Vault Id: ';
         }
 
-        $entryId = Read-Host 'Hub Entry Id: '
+        Write-Verbose "Parsing entry name" -Verbose:$verboseEnabled
+        $entryId
+        try {
+            $entryId = [System.Guid]::Parse($Name)
+        }
+        catch {
+            $entryId = Read-Host 'Hub Entry Id: '
+        }
 
         Remove-HubEntry -VaultId $vaultId -EntryId $entryId;
     }

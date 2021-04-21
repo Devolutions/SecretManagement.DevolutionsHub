@@ -45,6 +45,7 @@ function Set-Secret {
         if (-not $newHubEntry) {
             $newHubEntry = [Devolutions.Generated.Models.Connection]@{ 
                 Name           = $Name; 
+                # Group
                 ConnectionType = [Devolutions.Generated.Enums.ConnectionType]::Credential; 
                 Credentials    = @{ 
                     CredentialType = [Devolutions.Generated.Enums.CredentialResolverConnectionType]::Default;

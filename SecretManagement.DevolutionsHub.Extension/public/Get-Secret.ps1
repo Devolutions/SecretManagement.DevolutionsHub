@@ -1,8 +1,7 @@
 using namespace Microsoft.PowerShell.SecretManagement
 using namespace Devolutions.Hub.PowerShell
 
-function Get-Secret
-{
+function Get-Secret {
     [CmdletBinding()]
     param(
         [string] $Name,
@@ -22,6 +21,7 @@ function Get-Secret
         Write-Verbose $Name -Verbose:$verboseEnabled
 
         $foundEntry = $null;
+        # vaultId should always be set
         if (-not $vaultId) {
             foreach ($vault in Get-HubVault) {                
                 Write-Verbose $vault.Id -Verbose:$verboseEnabled
@@ -33,20 +33,27 @@ function Get-Secret
                     }
                 }
                 
-                if ($foundEntry){
+                if ($foundEntry) {
                     # found
                     break;
                 }
             }
         }
         else {
-            foreach ($entry in (Get-HubEntry -VaultId $vaultId)) {
-                if ($entry.Connection.Name -eq $Name) {
-                    $foundEntry = $entry;
-                    Write-Verbose "Entry $Name was found" -Verbose:$verboseEnabled
-                    break;
-                }
+            Write-Verbose "Parsing entry name" -Verbose:$verboseEnabled
+            try {
+                $entryId = [System.Guid]::Parse($Name)
+                $foundEntry = Get-HubEntry -VaultId $vaultId -EntryId $entryId
             }
+            catch {
+                foreach ($entry in (Get-HubEntry -VaultId $vaultId)) {
+                    if ($entry.Connection.Name -eq $Name) {
+                        $foundEntry = $entry;
+                        Write-Verbose "Entry $Name was found" -Verbose:$verboseEnabled
+                        break;
+                    }
+                }
+            }       
         }
 
         if (-not $foundEntry) {
