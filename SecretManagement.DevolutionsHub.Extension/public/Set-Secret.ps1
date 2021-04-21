@@ -42,10 +42,16 @@ function Set-Secret {
             }
         }
 
+        $parsedName = $Name -split '\\'
+        $entryName = $parsedName[$parsedName.Length - 1];
+        if ($parsedName.Length -ge 2) {
+            $group = $parsedName[0 .. ($parsedName.Length - 2)] | Join-String -Separator '\\'
+        }
+        
         if (-not $newHubEntry) {
             $newHubEntry = [Devolutions.Generated.Models.Connection]@{ 
-                Name           = $Name; 
-                # Group
+                Name           = $entryName;
+                Group          = $group;
                 ConnectionType = [Devolutions.Generated.Enums.ConnectionType]::Credential; 
                 Credentials    = @{ 
                     CredentialType = [Devolutions.Generated.Enums.CredentialResolverConnectionType]::Default;

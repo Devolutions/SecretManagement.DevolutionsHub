@@ -15,7 +15,7 @@ function Connect-DevolutionsHub {
     # Only checks if VaultId is a GUID
     Write-Verbose "Parsing VaultId" -Verbose:$verboseEnabled
     try {
-        [System.Guid]::Parse($hubParameters.VaultId)
+        $vaultId = [System.Guid]::Parse($hubParameters.VaultId)
     }
     catch {
         Write-Verbose "VauldId is not a valid ID." -Verbose:$verboseEnabled
