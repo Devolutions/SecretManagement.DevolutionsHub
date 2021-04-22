@@ -6,6 +6,4 @@ function Unregister-SecretVault
         [string] $VaultName,
         [hashtable] $AdditionalParameters
     )
-
-    # Clean up work.
 }

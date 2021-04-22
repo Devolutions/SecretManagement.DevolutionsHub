@@ -18,7 +18,7 @@ function Get-SecretInfo
         Connect-DevolutionsHub($VaultName, $hubParameters);
     
         $vaultId = $AdditionalParameters.VaultId;
-        Write-Verbose "selected vault Id: $vaultId" -Verbose:$verboseEnabled
+        Write-Verbose "Selected vault Id: $vaultId" -Verbose:$verboseEnabled
     
         $hubEntries = [System.Collections.ArrayList]::new();
         foreach ($entry in (Get-HubEntry -VaultId $vaultId)) {

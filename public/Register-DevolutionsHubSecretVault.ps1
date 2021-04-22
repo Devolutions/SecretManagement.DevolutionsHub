@@ -22,6 +22,6 @@ function Register-DevolutionsHubSecretVault
     Register-SecretVault -ModuleName $ModuleName -Name $Name -VaultParameters @{}
 
     if (-not (Get-SecretVault -Name $name)) {
-        throw 'SecretVault could not be registered properly'  # clean up error message
+        throw 'SecretVault could not be registered properly'
     }
 }
