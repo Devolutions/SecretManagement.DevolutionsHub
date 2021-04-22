@@ -58,7 +58,7 @@ RequiredModules = @(
     }, 
     @{
         ModuleName = 'Devolutions.Hub'
-        ModuleVersion = '2021.1.2'
+        ModuleVersion = '2021.1.3'
     }
 )
 

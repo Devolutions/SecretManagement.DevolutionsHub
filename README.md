@@ -34,7 +34,7 @@ Set-Secret -VaultName 'hubVaultName' -Name 'entryName' -Secret $credentials
 Get-SecretInfo -VaultName 'hubVaultName'
 ```
 
-* Get an entry using the stored vault
+* Get an entry using the stored vault. Providing an ID in the name field will be much faster than the entry's name
 ```PowerShell
 Get-Secret -VaultName 'hubVaultName' -Name 'entryName'
 ```
