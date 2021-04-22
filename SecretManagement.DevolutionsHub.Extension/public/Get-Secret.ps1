@@ -21,45 +21,37 @@ function Get-Secret {
         Write-Verbose $Name -Verbose:$verboseEnabled
 
         $foundEntry = $null;
-        # vaultId should always be set
-        if (-not $vaultId) {
-            foreach ($vault in Get-HubVault) {                
-                Write-Verbose $vault.Id -Verbose:$verboseEnabled
-                foreach ($entry in (Get-HubEntry -VaultId $vault.Id)) {
-                    if ($entry.Connection.Name -eq $Name) {
-                        $foundEntry = $entry;
-                        Write-Verbose "Entry $Name was found" -Verbose:$verboseEnabled
-                        break;
-                    }
-                }
-                
-                if ($foundEntry) {
+        Write-Verbose "Parsing entry name" -Verbose:$verboseEnabled
+        try {
+            $entryId = [System.Guid]::Parse($Name)
+            $foundEntry = Get-HubEntry -VaultId $vaultId -EntryId $entryId
+        }
+        catch {
+            $parsedName = $Name -split '\\'
+            $entryName = $parsedName[$parsedName.Length - 1];
+            if ($parsedName.Length -ge 2) {
+                $group = $parsedName[0 .. ($parsedName.Length - 2)] | Join-String -Separator '\\'
+            }
+
+            Write-Verbose "Looking for $($entryName) in $($parsedName)" -Verbose:$verboseEnabled
+            foreach ($entry in (Get-HubEntry -VaultId $vaultId)) {
+                if ($entry.Connection.Group -eq $group -and $entry.Connection.Name -eq $entryName) {
+                    $foundEntry = $entry;
+                    Write-Verbose "Entry $Name was found" -Verbose:$verboseEnabled
                     break;
                 }
             }
-        }
-        else {
-            Write-Verbose "Parsing entry name" -Verbose:$verboseEnabled
-            try {
-                $entryId = [System.Guid]::Parse($Name)
-                $foundEntry = Get-HubEntry -VaultId $vaultId -EntryId $entryId
-            }
-            catch {
-                foreach ($entry in (Get-HubEntry -VaultId $vaultId)) {
-                    if ($entry.Connection.Name -eq $Name) {
-                        $foundEntry = $entry;
-                        Write-Verbose "Entry $Name was found" -Verbose:$verboseEnabled
-                        break;
-                    }
-                }
-            }       
-        }
+        }  
 
         if (-not $foundEntry) {
-            Write-Verbose "no entry found" -Verbose:$verboseEnabled
+            Write-Verbose "No entry found" -Verbose:$verboseEnabled
             throw "Entry Not found";
         }
         else {
+            if ($foundEntry.Connection.ConnectionType -ne "Credential") {
+                Write-Verbose "Entry of type $($foundEntry.Connection.ConnectionType) was found" -Verbose:$verboseEnabled
+            }
+
             $securePassword = ConvertTo-SecureString -String $foundEntry.Connection.Credentials.Password -AsPlainText;
             return [PSCredential]::new($foundEntry.Connection.Credentials.UserName, $securePassword);
         }
