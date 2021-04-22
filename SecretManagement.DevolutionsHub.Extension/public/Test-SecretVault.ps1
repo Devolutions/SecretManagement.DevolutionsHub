@@ -15,12 +15,12 @@ function Test-SecretVault {
             throw "Vault Id isn't set."
         }
 
-        Connect-DevolutionsHub($VaultName, $hubParameters) # Connect-HubAccount returning the context would be useful
-        $hubContext = Get-HubContext | Where-Object {$_.ApplicationKey -eq $hubParameters.ApplicationKey} | Select-Object -First 1
-        return -not ($null -eq $hubContext)
+        Connect-DevolutionsHub($VaultName, $hubParameters)
+        return $true
     }
     catch {
         Write-Verbose $_.Exception.Message -Verbose:$verboseEnabled
+        return $false
     }
     finally {
         Disconnect-DevolutionsHub($hubParameters)
