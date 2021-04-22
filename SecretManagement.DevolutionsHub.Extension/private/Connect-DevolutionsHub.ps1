@@ -16,6 +16,7 @@ function Connect-DevolutionsHub {
     Write-Verbose "Parsing VaultId" -Verbose:$verboseEnabled
     try {
         $vaultId = [System.Guid]::Parse($hubParameters.VaultId)
+        Write-Verbose "$vaultId" -Verbose:$verboseEnabled
     }
     catch {
         Write-Verbose "VauldId is not a valid ID." -Verbose:$verboseEnabled
@@ -27,7 +28,7 @@ function Connect-DevolutionsHub {
         Url               = $hubParameters.Url
     }
 
-    Write-Verbose 'Connecting to Hub' -Verbose:$verboseEnabled #
+    Write-Verbose 'Connecting to Hub' -Verbose:$verboseEnabled
     Connect-HubAccount -PSHubContext $PSHubContext;
-    Write-Verbose 'Connected to Hub' -Verbose:$verboseEnabled #
+    Write-Verbose 'Connected to Hub' -Verbose:$verboseEnabled
 }

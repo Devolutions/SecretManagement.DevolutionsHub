@@ -34,7 +34,6 @@ function Get-Secret {
                 }
                 
                 if ($foundEntry) {
-                    # found
                     break;
                 }
             }
