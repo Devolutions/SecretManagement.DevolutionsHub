@@ -31,16 +31,22 @@ function Get-SecretInfo
         Write-Verbose "Found Entries: $($hubEntries.Count)" -Verbose:$verboseEnabled
     
         return $hubEntries | ForEach-Object {
+            if ($_.Connection.Group -eq "") {
+                $entryName = $_.Connection.Name
+            }
+            else {
+                $_.Connection.Group + "\" + $_.Connection.Name
+            }
+
             [Microsoft.PowerShell.SecretManagement.SecretInformation]::new(
-                $_.Connection.Name, 
+                $entryName, 
                 [Microsoft.PowerShell.SecretManagement.SecretType]::PSCredential, # Get-Secret always returns PSCredential
                 $VaultName,
                 @{
-                    Name = "ID"
-                    Value = $_.Connection.ID
+                    EntryId = $_.Connection.ID
                 }
             )
-        } | Sort-Object -Property Name
+        } | Sort-Object -Property Name -Unique # Multiple entries with the same name are trimmed to prevent issue with SecretManagement
     }
     catch {
         Write-Verbose $_.Exception.Message -Verbose:$verboseEnabled
