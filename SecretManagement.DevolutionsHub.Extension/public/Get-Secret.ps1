@@ -32,8 +32,11 @@ function Get-Secret {
             if ($parsedName.Length -ge 2) {
                 $group = $parsedName[0 .. ($parsedName.Length - 2)] | Join-String -Separator '\\'
             }
+            else {
+                $group = ""
+            }
 
-            Write-Verbose "Looking for $($entryName) in $($parsedName)" -Verbose:$verboseEnabled
+            Write-Verbose "Looking for $($entryName) in $($group)" -Verbose:$verboseEnabled
             foreach ($entry in (Get-HubEntry -VaultId $vaultId)) {
                 if ($entry.Connection.Group -eq $group -and $entry.Connection.Name -eq $entryName) {
                     $foundEntry = $entry;

@@ -18,7 +18,7 @@ function Set-Secret {
 
         $vaultId = $hubParameters.VaultId;        
         if (-not $vaultId) {
-            $vaultId = Read-Host 'Hub Vault Id: ';
+            $vaultId = Read-Host 'Hub Vault Id ';
         }
 
         switch ($Secret.GetType()) {
@@ -30,11 +30,11 @@ function Set-Secret {
                 $password = ConvertFrom-SecureString -SecureString $Secret.Password -AsPlainText;
             }
             ([String]) {
-                $username = Read-Host 'Username: ';                
+                $username = Read-Host 'Username ';                
                 $password = $Secret;
             }
             ([securestring]) {
-                $username = Read-Host 'Username: ';
+                $username = Read-Host 'Username ';
                 $password = ConvertFrom-SecureString -SecureString $Secret -AsPlainText
             }
             default {
