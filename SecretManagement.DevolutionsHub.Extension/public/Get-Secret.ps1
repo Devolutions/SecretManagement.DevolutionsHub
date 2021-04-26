@@ -70,7 +70,7 @@ function Get-Secret {
 
             if ($foundEntry.Connection.Credentials.UserName -eq "") {
                 Write-Verbose "Generating with credentials username" -Verbose:$verboseEnabled
-                return New-Object PSCredential -ArgumentList ([pscustomobject] @{ UserName = ''; Password = $securePassword[0] }) 
+                return New-Object PSCredential -ArgumentList ([pscustomobject] @{ UserName = $null; Password = $securePassword[0] }) 
             }
             else {
                 $username = $foundEntry.Connection.Credentials.UserName
