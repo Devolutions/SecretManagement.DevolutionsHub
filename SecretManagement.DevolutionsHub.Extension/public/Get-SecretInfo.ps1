@@ -35,7 +35,7 @@ function Get-SecretInfo
                 $entryName = $_.Connection.Name
             }
             else {
-                $_.Connection.Group + "\" + $_.Connection.Name
+                $entryName = $_.Connection.Group + "\" + $_.Connection.Name
             }
 
             [Microsoft.PowerShell.SecretManagement.SecretInformation]::new(
