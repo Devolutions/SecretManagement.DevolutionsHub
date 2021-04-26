@@ -55,8 +55,28 @@ function Get-Secret {
                 Write-Verbose "Entry of type $($foundEntry.Connection.ConnectionType) was found" -Verbose:$verboseEnabled
             }
 
-            $securePassword = ConvertTo-SecureString -String $foundEntry.Connection.Credentials.Password -AsPlainText;
-            return [PSCredential]::new($foundEntry.Connection.Credentials.UserName, $securePassword);
+            if (($foundEntry.Connection.Credentials.UserName -eq "") -and ($foundEntry.Connection.Credentials.Password -eq "")) {
+                Write-Verbose "Generating empty credentials" -Verbose:$verboseEnabled
+                return [PSCredential]::Empty
+            }
+
+            if ($foundEntry.Connection.Credentials.Password -eq "") {
+                Write-Verbose "Generating credentials with empty password" -Verbose:$verboseEnabled
+                $securePassword = (new-object System.Security.SecureString)
+            }
+            else {
+                $securePassword = ConvertTo-SecureString -String $foundEntry.Connection.Credentials.Password -AsPlainText
+            }
+
+            if ($foundEntry.Connection.Credentials.UserName -eq "") {
+                Write-Verbose "Generating with credentials username" -Verbose:$verboseEnabled
+                return New-Object PSCredential -ArgumentList ([pscustomobject] @{ UserName = ''; Password = $securePassword[0] }) 
+            }
+            else {
+                $username = $foundEntry.Connection.Credentials.UserName
+            }
+
+            return [PSCredential]::new($username, $securePassword)
         }
     }
     catch {
