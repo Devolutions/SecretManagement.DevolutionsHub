@@ -30,7 +30,7 @@ function Get-Secret {
             $parsedName = $Name -split '\\'
             $entryName = $parsedName[$parsedName.Length - 1];
             if ($parsedName.Length -ge 2) {
-                $group = $parsedName[0 .. ($parsedName.Length - 2)] | Join-String -Separator '\\'
+                $group = $parsedName[0 .. ($parsedName.Length - 2)] | Join-String -Separator '\'
             }
             else {
                 $group = ""
@@ -48,7 +48,7 @@ function Get-Secret {
 
         if (-not $foundEntry) {
             Write-Verbose "No entry found" -Verbose:$verboseEnabled
-            throw "Entry Not found";
+            throw "Entry Not found"
         }
         else {
             if ($foundEntry.Connection.ConnectionType -ne "Credential") {

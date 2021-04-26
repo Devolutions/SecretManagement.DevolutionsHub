@@ -45,7 +45,7 @@ function Set-Secret {
         $parsedName = $Name -split '\\'
         $entryName = $parsedName[$parsedName.Length - 1];
         if ($parsedName.Length -ge 2) {
-            $group = $parsedName[0 .. ($parsedName.Length - 2)] | Join-String -Separator '\\'
+            $group = $parsedName[0 .. ($parsedName.Length - 2)] | Join-String -Separator '\'
         }
         
         if (-not $newHubEntry) {
@@ -60,6 +60,10 @@ function Set-Secret {
                     Password       = $password 
                 }
             }
+        }
+        else {
+            $newHubEntry.Name = $entryName
+            $newHubEntry.Group = $group
         }
     
         New-HubEntry -VaultId $vaultId -Connection $newHubEntry
