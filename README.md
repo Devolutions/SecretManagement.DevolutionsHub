@@ -2,7 +2,7 @@
 
 This module is an implementation of Powershell SecretManagement for Devolutions Hub.
 
-**Note:** Due to the encryption model of Devolutions Hub, operations are much faster when providing the id of an entry rather than its name. The )_vault id_ and _entry id_ appear in the URL when opening an entry in Hub (eg. `https://myvault.devolutions.app/assets/<vault-id>/<entry-id>/overview`).
+**Note:** Due to the encryption model of Devolutions Hub, operations are much faster when providing the id of an entry rather than its name. The _vault id_ and _entry id_ appear in the URL when opening an entry in Hub (eg. `https://myvault.devolutions.app/assets/<vault-id>/<entry-id>/overview`).
 
 ## Quick Start
 
@@ -29,7 +29,7 @@ Register-SecretVault -Name 'hubVaultName' -ModuleName 'SecretManagement.Devoluti
 To confirm that the access to the vault works, use the following command:
 
 ```powershell
-Test-SecretVault -Vault 'hubVaultName'
+Test-SecretVault 'hubVaultName'
 ```
 
 ## Usage
