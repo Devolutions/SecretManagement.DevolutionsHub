@@ -49,7 +49,7 @@ function Get-SecretInfo
         } | Sort-Object -Property Name -Unique # Multiple entries with the same name are trimmed to prevent issue with SecretManagement
     }
     catch {
-        Write-Verbose $_.Exception.Message -Verbose:$verboseEnabled
+        Write-Error $_.Exception.Message
     }
     finally {
         Disconnect-DevolutionsHub($hubParameters);

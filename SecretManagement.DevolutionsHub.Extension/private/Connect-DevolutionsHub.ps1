@@ -17,7 +17,8 @@ function Connect-DevolutionsHub {
         Write-Verbose "$vaultId" -Verbose:$verboseEnabled
     }
     catch {
-        Write-Verbose "VaultId is not a valid ID." -Verbose:$verboseEnabled
+        Write-Verbose "VaultId is not a valid GUID." -Verbose:$verboseEnabled
+        throw [System.Exception] "VaultID is invalid"
     }
 
     $PSHubContext = [Devolutions.Hub.PowerShell.Entities.PowerShell.PSHubContext] @{

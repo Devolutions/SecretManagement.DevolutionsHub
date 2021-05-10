@@ -74,7 +74,7 @@ function Get-Secret {
         }
     }
     catch {
-        Write-Verbose $_.Exception.Message -Verbose:$verboseEnabled
+        Write-Error $_.Exception.Message
     }
     finally {
         Disconnect-DevolutionsHub($hubParameters);

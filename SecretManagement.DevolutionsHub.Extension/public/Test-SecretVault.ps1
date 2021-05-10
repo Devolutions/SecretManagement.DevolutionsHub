@@ -19,7 +19,7 @@ function Test-SecretVault {
         return $true
     }
     catch {
-        Write-Verbose $_.Exception.Message -Verbose:$verboseEnabled
+        Write-Error $_.Exception.Message
         return $false
     }
     finally {
