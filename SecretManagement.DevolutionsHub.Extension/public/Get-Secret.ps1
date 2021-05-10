@@ -17,6 +17,26 @@ function Get-Secret {
         Connect-DevolutionsHub($VaultName, $hubParameters);
 
         $vaultId = $hubParameters.VaultId;
+        Write-Verbose "Parsing VaultId" -Verbose:$verboseEnabled
+        try {
+            $vaultId = [System.Guid]::Parse($Vault)
+            Write-Verbose "$vaultId" -Verbose:$verboseEnabled
+        }
+        catch {
+            Write-Verbose "VaultId is not a valid GUID. Looking for Vault with name: $Vault" -Verbose:$verboseEnabled
+
+            foreach ($hubVault in Get-HubVault) {
+                if ($hubVault.Name -eq $vaultId) {
+                    $vaultId = $hubVault.Id
+                    $vaultFound = $true
+                    break;
+                }
+            }
+
+            if (-not $vaultFound) {
+                throw [System.Exception] "Vault $($vauldId) not found."
+            }
+        }
 
         Write-Verbose $Name -Verbose:$verboseEnabled
 

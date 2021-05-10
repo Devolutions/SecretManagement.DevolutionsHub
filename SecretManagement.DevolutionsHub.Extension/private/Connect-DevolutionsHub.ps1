@@ -11,16 +11,6 @@ function Connect-DevolutionsHub {
         throw "VaultId not found! Please configure a Hub VaultId to your SecretVault."
     }
 
-    Write-Verbose "Parsing VaultId" -Verbose:$verboseEnabled
-    try {
-        $vaultId = [System.Guid]::Parse($hubParameters.VaultId)
-        Write-Verbose "$vaultId" -Verbose:$verboseEnabled
-    }
-    catch {
-        Write-Verbose "VaultId is not a valid GUID." -Verbose:$verboseEnabled
-        throw [System.Exception] "VaultID is invalid"
-    }
-
     $PSHubContext = [Devolutions.Hub.PowerShell.Entities.PowerShell.PSHubContext] @{
         ApplicationKey    = $hubParameters.ApplicationKey; 
         ApplicationSecret = $hubParameters.ApplicationSecret; 
