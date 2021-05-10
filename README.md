@@ -1,45 +1,59 @@
 # SecretManagement.DevolutionsHub
 
+This module is an implementation of Powershell SecretManagement for Devolutions Hub.
+
+**Note:** Due to the encryption model of Devolutions Hub, operations are much faster when providing the id of an entry rather than its name. The )_vault id_ and _entry id_ appear in the URL when opening an entry in Hub (eg. `https://myvault.devolutions.app/assets/<vault-id>/<entry-id>/overview`).
+
 ## Quick Start
 
-* Setup Devolutions Hub Vault
+Install SecretManagement.DevolutionsHub from PSGallery.
 
-* Install SecretManagement.DevolutionsHub 
-```Powershell
+```powershell
 Install-Module SecretManagement.DevolutionsHub
 ```
 
-* Register Vault
-```PowerShell
+To use this module, create an [application user](https://helphub.devolutions.net/hub_application_users.html) and take note of the application key and application secret. The vault id appears in the URL when navigating a vault. (eg.
+https://myvaut.devolutions.app/assets/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx).
+
+Register the vault with the following command:
+
+```powerShell
 Register-SecretVault -Name 'hubVaultName' -ModuleName 'SecretManagement.DevolutionsHub' -VaultParameters @{
-    Url = ""
-    ApplicationKey = ""
-    ApplicationSecret = ""
-    VaultId = ""
+    Url = "https://myvault.devolutions.app"
+    ApplicationKey = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx;xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    ApplicationSecret = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    VaultId = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 }
 ```
 
-* Test the vault
-```PowerShell
+To confirm that the access to the vault works, use the following command:
+
+```powershell
 Test-SecretVault -Vault 'hubVaultName'
 ```
 
-* Add an entry to the stored vault
-```PowerShell
-Set-Secret -VaultName 'hubVaultName' -Name 'entryName' -Secret $credentials
+## Usage
+
+Add an entry to the stored vault:
+
+```powershell
+Set-Secret -Vault 'hubVaultName' -Name 'entryName' -Secret $credentials
 ```
 
-* Get a list of available entries from the stored vault
-```PowerShell
-Get-SecretInfo -VaultName 'hubVaultName'
+Get a list of available entries from the stored vault:
+
+```powershell
+Get-SecretInfo -Vault 'hubVaultName'
 ```
 
-* Get an entry using the stored vault. Providing an ID in the name field will be much faster than the entry's name. Only Credential type entries are supported at the moment
-```PowerShell
-Get-Secret -VaultName 'hubVaultName' -Name 'entryName'
+Get an entry using the stored vault. Providing an ID in the name field will be much faster than the entry's name. Only `Credential` entries are supported at the moment.
+
+```powershell
+Get-Secret -Vault 'hubVaultName' -Name 'entryID'
 ```
 
-* Remove an entry from the stored vault
-```PowerShell
-Remove-Secret -VaultName 'hubVaultName'
+Remove an entry from the stored vault.
+
+```powershell
+Remove-Secret -Vault 'hubVaultName' -Name 'entryID'
 ```
