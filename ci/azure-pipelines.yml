@@ -1,0 +1,39 @@
+name: hub-secretmanagement-$(Rev:r)
+
+trigger:
+  branches:
+    include:
+      - master
+
+pool:
+  vmImage: windows-latest
+  timeoutInMinutes: 30
+
+variables:
+ - group: Artifactory
+
+stages:
+  - stage: build
+    jobs:
+      - job: powershell
+        displayName: powershell module
+
+        workspace:
+          clean: all
+
+        steps:
+          - powershell: .\build.ps1
+            displayName: Building module
+
+          - task: ArchiveFiles@2
+            displayName: Archive build artifacts
+            inputs:
+              rootFolderOrFile: $(Build.Repository.LocalPath)\package\SecretManagement.DevolutionsHub\
+              includeRootFolder: true
+              archiveFile: $(Build.ArtifactStagingDirectory)/hub-secretmanagement.zip
+
+          - task: PublishBuildArtifacts@1
+            displayName: Upload build artifacts
+            inputs:
+              pathToPublish: $(Build.ArtifactStagingDirectory)
+              artifactName: hub-secretmanagement
