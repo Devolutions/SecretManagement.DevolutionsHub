@@ -19,6 +19,12 @@ jobs:
           token: ${{ secrets.DEVOLUTIONSBOT_TOKEN }}
           path: ./.github/workflows
 
+      - name: Install module dependencies
+        shell: pwsh
+        run: |
+          Install-Module Microsoft.Powershell.SecretManagement
+          Install-Module Devolutions.Hub
+
       - name: Build application
         uses: ./.github/workflows/powershell-build
 
