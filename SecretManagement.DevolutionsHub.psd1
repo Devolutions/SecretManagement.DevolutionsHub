@@ -100,7 +100,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = @('SecretManagement','Devolutions','Hub')
+        Tags = @('SecretManagement','Devolutions','Hub', 'Passowrd', 'RDM', 'RemoteDesktopManager')
 
         # A URL to the license for this module.
         # LicenseUri = ''
@@ -121,7 +121,7 @@ PrivateData = @{
         # RequireLicenseAcceptance = $false
 
         # External dependent modules of this module
-        ExternalModuleDependencies = @('Microsoft.Powershell.SecretManagement', 'Devolutions.Hub')
+        # ExternalModuleDependencies = @('Microsoft.Powershell.SecretManagement', 'Devolutions.Hub')
 
     } # End of PSData hashtable
 
