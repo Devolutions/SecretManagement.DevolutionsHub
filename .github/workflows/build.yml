@@ -1,11 +1,6 @@
 name: Building
 
-on:
-  push:
-    branches:
-      - master
-      - DEVSEC-403
-  workflow_dispatch:
+on: [push]
 
 jobs:
   build:
