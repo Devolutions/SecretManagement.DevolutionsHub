@@ -8,21 +8,4 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out ${{ github.repository }}
-        uses: actions/checkout@v2
-
-      - name: Check out Devolutions/actions
-        uses: actions/checkout@v2
-        with:
-          repository: Devolutions/actions
-          ref: master
-          token: ${{ secrets.DEVOLUTIONSBOT_TOKEN }}
-          path: ./.github/workflows
-
-      - name: Build application
-        uses: ./.github/workflows/powershell-build
-
-      - uses: actions/upload-artifact@v2
-        with:
-          name: SecretManagement.DevolutionsHub
-          path: ./package/SecretManagement.DevolutionsHub
+      - run: echo test
