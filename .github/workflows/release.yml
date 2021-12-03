@@ -6,6 +6,7 @@ on:
 
 jobs:
   publish-to-gallery:
+    environment: psgallery-publish
     runs-on: ubuntu-latest
     steps:
       - name: Check out ${{ github.repository }}
@@ -32,5 +33,5 @@ jobs:
       - name: Publish application
         uses: ./.github/workflows/powershell-publish
         with:
-          nugetApiKey: ${{ secrets.NUGET_API_KEY }}
+          nugetApiKey: ${{ secrets.PSGALLERY_API_KEY }}
           modulePath: ./package/SecretManagement.DevolutionsHub
