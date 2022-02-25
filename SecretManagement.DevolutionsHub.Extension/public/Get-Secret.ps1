@@ -19,11 +19,11 @@ function Get-Secret {
         $vaultId = $hubParameters.VaultId;
         Write-Verbose "Parsing VaultId" -Verbose:$verboseEnabled
         try {
-            $vaultId = [System.Guid]::Parse($Vault)
+            $vaultId = [System.Guid]::Parse($vaultId)
             Write-Verbose "$vaultId" -Verbose:$verboseEnabled
         }
         catch {
-            Write-Verbose "VaultId is not a valid GUID. Looking for Vault with name: $Vault" -Verbose:$verboseEnabled
+            Write-Verbose "VaultId is not a valid GUID. Looking for Vault with name: $vaultId" -Verbose:$verboseEnabled
 
             foreach ($hubVault in Get-HubVault) {
                 if ($hubVault.Name -eq $vaultId) {

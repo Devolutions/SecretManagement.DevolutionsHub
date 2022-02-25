@@ -6,7 +6,7 @@ This module is an implementation of Powershell SecretManagement for Devolutions 
 
 ## Quick Start
 
-Install SecretManagement.DevolutionsHub from PSGallery.
+Install SecretManagement.DevolutionsHub from [PSGallery](https://www.powershellgallery.com/packages/SecretManagement.DevolutionsHub).
 
 ```powershell
 Install-Module SecretManagement.DevolutionsHub

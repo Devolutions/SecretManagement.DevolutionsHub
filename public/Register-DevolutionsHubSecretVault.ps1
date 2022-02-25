@@ -38,6 +38,10 @@ function Register-DevolutionsHubSecretVault
             }
         }
     }
+
+    if (-not $vaultId) {
+        throw 'Vault could not be found'
+    }
     
     $ModuleName = 'SecretManagement.DevolutionsHub'
 
