@@ -66,16 +66,18 @@ function Set-Secret {
         }
         
         if (-not $newHubEntry) {
-            $newHubEntry = [Devolutions.Generated.Models.Connection]@{ 
-                Name           = $entryName;
-                Group          = $group;
-                ConnectionType = [Devolutions.Generated.Enums.ConnectionType]::Credential; 
-                Credentials    = @{ 
-                    CredentialType = [Devolutions.Generated.Enums.CredentialResolverConnectionType]::Default;
-                    UserName       = $username;
-                    # Domain         = "";
-                    Password       = $password 
-                }
+            $newHubEntry = [Devolutions.Hub.PowerShell.Entities.Hub.PSDecryptedEntry]@{ 
+                PsMetadata = [Devolutions.Hub.PowerShell.Entities.Hub.PSMetadata]@{ 
+                    Name = $entryName; 
+                    ConnectionType = [Devolutions.Generated.Enums.ConnectionType]::Credential 
+                };
+                Connection = [Devolutions.Generated.Models.Connection]@{ 
+                    Credentials = [Devolutions.Generated.Models.CredentialsConnection]@{ 
+                        CredentialType = [Devolutions.Generated.Enums.CredentialResolverConnectionType]::Default; 
+                        UserName = $username;
+                        Password = $password
+                    } 
+                } 
             }
         }
         else {
@@ -83,7 +85,7 @@ function Set-Secret {
             $newHubEntry.Group = $group
         }
     
-        New-HubEntry -VaultId $vaultId -Connection $newHubEntry
+        New-HubEntry -VaultId $vaultId -PSDecryptedEntry $newHubEntry
         Write-Verbose "Entry Added" -Verbose:$verboseEnabled
     }
     catch {

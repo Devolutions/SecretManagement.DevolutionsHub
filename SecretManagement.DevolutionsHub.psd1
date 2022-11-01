@@ -8,7 +8,7 @@
 RootModule = 'SecretManagement.DevolutionsHub.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.3.0'
+ModuleVersion = '0.4.0'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Core')
@@ -50,11 +50,11 @@ PowerShellVersion = '7.0'
 RequiredModules = @(
     @{
         ModuleName = 'Microsoft.Powershell.SecretManagement'
-        ModuleVersion = '1.0.0'
+        ModuleVersion = '1.1.2'
     }, 
     @{
         ModuleName = 'Devolutions.Hub'
-        ModuleVersion = '2021.1.3'
+        ModuleVersion = '2022.7.27'
     }
 )
 
