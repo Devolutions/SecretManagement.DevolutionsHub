@@ -6,8 +6,7 @@ Describe 'Get-Secret' {
             throw "Vault not configured properly"
         }
 
-        # get vaultId from $vault parameters
-        # $vaultId = 'd000b7bf-4403-4fb1-9409-b8f75c3a4438'
+        $vaultId = (Get-SecretVault -Name $vault | Select-Object VaultParameters).VaultParameters.VaultId
 
         $PesterGroup = [Devolutions.Hub.PowerShell.Entities.Hub.PSDecryptedEntry]@{ 
             PsMetadata = [Devolutions.Hub.PowerShell.Entities.Hub.PSMetadata]@{ 
