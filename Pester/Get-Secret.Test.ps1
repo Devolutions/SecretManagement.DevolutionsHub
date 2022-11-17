@@ -6,7 +6,17 @@ Describe 'Get-Secret' {
             throw "Vault not configured properly"
         }
 
-        $vaultId = (Get-SecretVault -Name $vault | Select-Object VaultParameters).VaultParameters.VaultId
+        $vaultParameters = (Get-SecretVault -name $vault).VaultParameters
+
+        $PSHubContext = [Devolutions.Hub.PowerShell.Entities.PowerShell.PSHubContext] @{
+            ApplicationKey    = $vaultParameters.ApplicationKey; 
+            ApplicationSecret = $vaultParameters.ApplicationSecret; 
+            Url               = $vaultParameters.Url
+        }
+
+        $vaultId = $vaultParameters.VaultId;
+
+        Connect-HubAccount -PSHubContext $PSHubContext;
 
         $PesterGroup = [Devolutions.Hub.PowerShell.Entities.Hub.PSDecryptedEntry]@{ 
             PsMetadata = [Devolutions.Hub.PowerShell.Entities.Hub.PSMetadata]@{ 
@@ -42,12 +52,12 @@ Describe 'Get-Secret' {
 
         It 'gets entry by Id' {
             $username = "SecretUser"
-            $entry = Get-Secret -Vault hubSec -Name $entry.Connection.ID
+            $entry = Get-Secret -Vault $vault -Name $entry.Connection.ID
             $entry.UserName | Should -Be "username123"
         }
         It 'gets entry by name' {
             $username = "SecretUser"
-            $entry = Get-Secret -Vault hubSec -Name $entry.Connection.Name
+            $entry = Get-Secret -Vault $vault -Name $entry.Connection.Name
             $entry.UserName | Should -Be "username123"
         }
     }
@@ -117,19 +127,19 @@ Describe 'Get-Secret' {
         }
 
         It 'gets entry without username' {
-            $entry = Get-Secret -Vault hubSec -Name $noUserEntry.Connection.ID
+            $entry = Get-Secret -Vault $vault -Name $noUserEntry.Connection.ID
             $entry | Should -Not -Be $null
             $entry.UserName | Should -Be ""
             $entry.Password | Should -Not -Be $null
         }
         It 'gets entry without password' {
-            $entry = Get-Secret -Vault hubSec -Name $noPassEntry.Connection.ID
+            $entry = Get-Secret -Vault $vault -Name $noPassEntry.Connection.ID
             $entry | Should -Not -Be $null
             $entry.UserName | Should -Not -Be $null
             $entry.Password | Should -Not -Be $null
         }
         It 'gets entry without credentials' {
-            $entry = Get-Secret -Vault hubSec -Name $noCredEntry.Connection.ID
+            $entry = Get-Secret -Vault $vault -Name $noCredEntry.Connection.ID
             $entry | Should -Not -Be $null
             $entry.UserName | Should -Be $null
             $entry.Password | Should -Be $null
