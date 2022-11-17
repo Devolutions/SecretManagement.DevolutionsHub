@@ -37,10 +37,19 @@ function Set-Secret {
                 throw [System.Exception] "Vault $($vauldId) not found."
             }
         }
-
+        
         switch ($Secret.GetType()) {
+            ([Devolutions.Hub.PowerShell.Entities.Hub.PSDecryptedEntry]) {
+                $newHubEntry = $secret
+            }
             ([Devolutions.Generated.Models.Connection]) {
-                $newHubEntry = $Secret;
+                $newHubEntry = [Devolutions.Hub.PowerShell.Entities.Hub.PSDecryptedEntry]@{ 
+                    PsMetadata = [Devolutions.Hub.PowerShell.Entities.Hub.PSMetadata]@{ 
+                        Name = $Name; 
+                        ConnectionType = [Devolutions.Generated.Enums.ConnectionType]::Credential 
+                    };
+                    Connection = $secret
+                }
             }
             ([pscredential]) {
                 $username = $Secret.Username;
@@ -57,12 +66,6 @@ function Set-Secret {
             default {
                 throw [System.NotImplementedException] "Provided secret type not supported.";
             }
-        }
-
-        $parsedName = $Name -split '\\'
-        $entryName = $parsedName[$parsedName.Length - 1];
-        if ($parsedName.Length -ge 2) {
-            $group = $parsedName[0 .. ($parsedName.Length - 2)] | Join-String -Separator '\'
         }
         
         if (-not $newHubEntry) {
@@ -81,8 +84,7 @@ function Set-Secret {
             }
         }
         else {
-            $newHubEntry.Name = $entryName
-            $newHubEntry.Group = $group
+            $newHubEntry.PsMetadata.Name = $Name
         }
     
         New-HubEntry -VaultId $vaultId -PSDecryptedEntry $newHubEntry
