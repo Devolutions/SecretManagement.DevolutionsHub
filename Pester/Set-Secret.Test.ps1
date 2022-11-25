@@ -84,6 +84,12 @@ Describe 'Set-Secret' {
         }
     }
 
+    Context 'Secret using different password types' {
+        It 'accepts data without flags' {
+            Set-Secret -Vault $vault "entryName" "entryPass"
+        }
+    }
+
     AfterAll {
         Get-SecretInfo -Vault $vault -Name $entryName | ForEach-Object {
             Remove-Secret -Vault $vault -Name $_.Metadata.EntryId
