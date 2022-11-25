@@ -8,7 +8,7 @@
 RootModule = 'SecretManagement.DevolutionsHub.psm1'
 
 # Version number of this module.
-ModuleVersion = '2022.7.27'
+ModuleVersion = '2022.7.27.1'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Core')
