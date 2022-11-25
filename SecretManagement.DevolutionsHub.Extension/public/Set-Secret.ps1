@@ -71,7 +71,7 @@ function Set-Secret {
         if (-not $newHubEntry) {
             $newHubEntry = [Devolutions.Hub.PowerShell.Entities.Hub.PSDecryptedEntry]@{ 
                 PsMetadata = [Devolutions.Hub.PowerShell.Entities.Hub.PSMetadata]@{ 
-                    Name = $entryName; 
+                    Name = $Name; 
                     ConnectionType = [Devolutions.Generated.Enums.ConnectionType]::Credential 
                 };
                 Connection = [Devolutions.Generated.Models.Connection]@{ 
