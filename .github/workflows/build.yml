@@ -13,10 +13,10 @@ jobs:
 
     steps:
       - name: Check out ${{ github.repository }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Check out Devolutions/actions
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: Devolutions/actions
           ref: master
@@ -26,7 +26,7 @@ jobs:
       - name: Build application
         uses: ./.github/workflows/powershell-build
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: SecretManagement.DevolutionsHub
           path: ./package/SecretManagement.DevolutionsHub
