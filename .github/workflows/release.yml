@@ -1,4 +1,4 @@
-name: Publish PowerShell Module
+name: release
 
 on:
   release:
@@ -10,15 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out ${{ github.repository }}
-        uses: actions/checkout@v3
-
-      - name: Check out Devolutions/actions
-        uses: actions/checkout@v3
-        with:
-          repository: Devolutions/actions
-          ref: master
-          token: ${{ secrets.DEVOLUTIONSBOT_TOKEN }}
-          path: ./.github/workflows
+        uses: actions/checkout@v4
 
       - name: Install module dependencies
         shell: pwsh
@@ -28,10 +20,9 @@ jobs:
           Install-Module Devolutions.Hub
 
       - name: Build application
-        uses: ./.github/workflows/powershell-build
+        run: ./build.ps1
+        shell: pwsh
 
       - name: Publish application
-        uses: ./.github/workflows/powershell-publish
-        with:
-          nugetApiKey: ${{ secrets.PSGALLERY_API_KEY }}
-          modulePath: ./package/SecretManagement.DevolutionsHub
+        run: Publish-Module -Path ./package/SecretManagement.DevolutionsHub -NuGetApiKey "${{ secrets.PSGALLERY_API_KEY }}" -Verbose
+        shell: pwsh
