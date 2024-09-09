@@ -17,7 +17,7 @@ jobs:
         run: ./build.ps1
         shell: pwsh
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4.3.6
         with:
           name: SecretManagement.DevolutionsServer
           path: ./package/SecretManagement.DevolutionsServer
